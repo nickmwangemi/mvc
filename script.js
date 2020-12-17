@@ -134,6 +134,35 @@ class View {
 			})
 		}
 	}
+
+	bindAddTodo(handler) {
+		this.form.addEventListener('submit', (e) => {
+			e.preventDefault()
+
+			if (this._todoText) {
+				handler(this._todoText)
+				this._resetInput()
+			}
+		})
+	}
+
+	bindDeleteTodo(handler) {
+		this.todoList.addEventListener('click', (e) => {
+			if (e.target.className === 'delete') {
+				const id = parseInt(e.target.parentElement.id)
+				handler(id)
+			}
+		})
+	}
+
+	bindToggleTodo(handler) {
+		this.todoList.addEventListener('change', (e) => {
+			if (e.target.type === 'checkbox') {
+				const id = parseInt(e.target.parentElement.id)
+				handler(id)
+			}
+		})
+	}
 }
 
 class Controller {
