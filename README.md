@@ -1,6 +1,6 @@
 # Todo MVC
 
-## Simple todo MVC application in plain JavaScript
+Simple todo MVC application in plain JavaScript
 
 ### [View the demo](https://nickmwangemi.github.io/mvc/)
 
