@@ -170,6 +170,12 @@ class Controller {
 		this.model = model
 		this.view = view
 
+		// Explicit this binding
+		this.view.bindAddTodo(this.handleAddTodo)
+		this.view.bindDeleteTodo(this.handleDeleteTodo)
+		this.view.bindToggleTodo(this.handleToggleTodo)
+		// this.view.bindEditTodo(this.handleEditTodo)
+
 		// Display initial todos
 		this.onTodoListChanged(this.model.todos)
 	}
