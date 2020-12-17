@@ -75,6 +75,30 @@ class View {
 
 		// Append the title, form and todo list to the app
 		this.app.append(this.title, this.form, this.todoList)
+
+		this._temporaryTodoText
+		this._initLocalListeners()
+	}
+
+	// Update temporary state
+	_initLocalListeners() {
+		this.todoList.addEventListener('input', (e) => {
+			if (e.target.className === 'editable') {
+				this._temporaryTodoText = e.target.innerText
+			}
+		})
+	}
+
+	// Send the completed value to the model
+	bindEditTodo(handler) {
+		this.todoList.addEventListener('focusout', (e) => {
+			if (this._temporaryTodoText) {
+				const id = parseInt(e.target.parentElement.id)
+
+				handler(id, this._temporaryTodoText)
+				this._temporaryTodoText = ''
+			}
+		})
 	}
 
 	get _todoText() {
@@ -185,7 +209,7 @@ class Controller {
 		this.view.bindDeleteTodo(this.handleDeleteTodo)
 		this.view.bindToggleTodo(this.handleToggleTodo)
 		this.model.bindTodoListChanged(this.onTodoListChanged)
-		// this.view.bindEditTodo(this.handleEditTodo)
+		this.view.bindEditTodo(this.handleEditTodo)
 
 		// Display initial todos
 		this.onTodoListChanged(this.model.todos)
