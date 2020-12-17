@@ -1,9 +1,6 @@
 class Model {
 	constructor() {
-		this.todos = [
-			{ id: 1, text: 'Run a marathon', complete: false },
-			{ id: 2, text: 'Plant a garden', complete: false },
-		]
+		this.todos = JSON.parse(localStorage.getItem('todos')) || []
 	}
 
 	addTodo(todoText) {
@@ -14,6 +11,7 @@ class Model {
 		}
 
 		this.todos.push(todo)
+		this.onTodoListChanged(this.todos)
 	}
 
 	editTodo(id, updatedText) {
@@ -22,10 +20,12 @@ class Model {
 				? { id: todo.id, text: updatedText, complete: todo.complete }
 				: todo
 		)
+		this.onTodoListChanged(this.todos)
 	}
 
 	deleteTodo(id) {
 		this.todos = this.todos.filter((todo) => todo.id !== id)
+		this.onTodoListChanged(this.todos)
 	}
 
 	toggleTodo(id) {
@@ -34,6 +34,11 @@ class Model {
 				? { id: todo.id, text: todo.text, complete: !todo.complete }
 				: todo
 		)
+		this.onTodoListChanged(this.todos)
+	}
+
+	bindTodoListChanged(callback) {
+		this.onTodoListChanged = callback
 	}
 }
 
@@ -174,6 +179,7 @@ class Controller {
 		this.view.bindAddTodo(this.handleAddTodo)
 		this.view.bindDeleteTodo(this.handleDeleteTodo)
 		this.view.bindToggleTodo(this.handleToggleTodo)
+		this.model.bindTodoListChanged(this.onTodoListChanged)
 		// this.view.bindEditTodo(this.handleEditTodo)
 
 		// Display initial todos
